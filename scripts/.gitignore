@@ -1,0 +1,4 @@
+cache/
+olden_era.json
+__pycache__/
+*.pyc
