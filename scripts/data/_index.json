@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "source": "https://paradrew.com",
+    "scraped_at": "2026-05-26T23:58:12.322785+00:00",
+    "note": "paradrew.com — Russian Olden Era reference (canonical for stats).",
+    "counts": {
+      "units": 62,
+      "heroes": 108,
+      "skills": 30,
+      "spells": 88,
+      "laws": 193,
+      "guides": 8
+    }
+  },
+  "files": {
+    "units": "units.json",
+    "heroes": "heroes.json",
+    "skills": "skills.json",
+    "spells": "spells.json",
+    "laws": "laws.json",
+    "guides": "guides.json"
+  }
+}

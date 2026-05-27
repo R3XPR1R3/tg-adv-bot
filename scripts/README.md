@@ -1,79 +1,50 @@
-# scrape_olden_era.py
+# Olden Era data scrapers
 
-Скрипт выгружает раздел **Heroes of Might and Magic: Olden Era** с
-`wiki.hoodedhorse.com` в один JSON-файл со структурой:
+## `scrape_paradrew.py` — основной скрапер (paradrew.com)
 
-```json
-{
-  "meta": { "source": "...", "scraped_at": "...", "counts": {...} },
-  "heroes":   [...],
-  "units":    [...],
-  "spells":   [...],
-  "skills":   [...],
-  "factions": [...],
-  "artifacts":[...],
-  "buildings":[...],
-  "other":    [...]
-}
-```
-
-## Установка
-
-Требуется Python 3.10+.
+Тащит структурированные данные раздела **Heroes of Might and Magic: Olden Era**
+с `paradrew.com` (русский справочник от стримера `paradrew101`). Сайт открыт без
+Cloudflare, поэтому работаем простым `urllib`.
 
 ```bash
-pip install -r scripts/requirements.txt
-python -m playwright install chromium
-# Linux: для headless-Chromium ещё нужны системные библиотеки —
-# либо `python -m playwright install-deps chromium` (нужен sudo),
-# либо ставить пакеты руками (libnss3, libnspr4, libatk1.0, libcups2,
-# libdrm2, libxkbcommon0, libxcomposite1, libxdamage1, libxfixes3,
-# libxrandr2, libgbm1, libasound2, libpango-1.0, libcairo2).
+python scripts/scrape_paradrew.py            # полный прогон
+python scripts/scrape_paradrew.py --limit 3  # smoke-тест
 ```
 
-## Запуск
+### Что выгружается (в `scripts/data/`)
 
-```bash
-# полный прогон — discover, fetch, parse, normalize
-python scripts/scrape_olden_era.py --phase all
+| Файл | Что внутри |
+|---|---|
+| `units.json`   | 62 юнита × 3 формы (базовая / улучшение / альт. улучшение); статы, способности, теги, лор |
+| `heroes.json`  | 108 героев: фракция, класс, девиз, стартовые статы, армия, доступные навыки с шансами |
+| `skills.json`  | 30 навыков с тирами `basic/advanced/expert`, под-перками, списком героев |
+| `spells.json`  | 88 заклинаний × 4 уровня (мана, описание, механики — Цель/Область/Длительность) |
+| `laws.json`    | 193 закона (фракционные перки) с `data-*` метаданными — фракция, тир, ветка, стоимость, max уровень |
+| `guides.json`  | 8 PvP-гайдов (полный текст + структура) |
+| `_index.json`  | каунты и список файлов |
 
-# проверочный мини-прогон — только 5 URL
-python scripts/scrape_olden_era.py --phase discover --limit 5
-python scripts/scrape_olden_era.py --phase fetch --limit 5
-python scripts/scrape_olden_era.py --phase parse
-python scripts/scrape_olden_era.py --phase normalize
-```
+Каждая запись содержит:
+- структурированные поля (где спарсилось);
+- `sections` — иерархия h1→h6 со списками/таблицами/изображениями (на случай, если структурное поле что-то упустило);
+- `_full_text` — весь текст страницы со снятой разметкой (safety net — гарантия, что ничего не потерялось);
+- `_images` — все картинки с alt.
 
-Опции:
+### Источник истины: paradrew
 
-- `--cache-dir DIR` — куда складывать промежуточные файлы (по умолчанию
-  `scripts/cache/`)
-- `--out PATH`     — финальный JSON (по умолчанию `scripts/olden_era.json`)
-- `--delay SEC`    — пауза между запросами, по умолчанию 1.5
-- `--limit N`      — обрабатывать максимум N URL (для smoke-теста)
-- `-v`             — подробные логи
+В wikitable от Hooded Horse и на paradrew статы расходятся (≈64% совпадение на
+выборке 31 юнита — разные снапшоты патчей Early Access). Для этого проекта
+выбран **paradrew как канон** — у него консистентная структура страниц,
+свежее обновление и активное сообщество.
 
-## Как это работает
+## `scrape_olden_era.py` — Playwright-скрапер для wiki.hoodedhorse.com (deprecated)
 
-Сайт защищён Cloudflare interactive challenge — обычный `requests` не работает.
-Поэтому используется headless Chromium через Playwright, который проходит
-JS-челлендж сам. Скрипт работает в четырёх фазах с кешем на диске, чтобы при
-ошибках парсинга не дёргать сайт повторно:
+Каркас на Playwright. **Не работает** из этого окружения: Cloudflare Turnstile
+блокирует headless Chromium из дата-центрового IP. Оставлен в репо как
+референс — может пригодиться при запуске с реальной машины (Cloudflare там
+обычно проходит).
 
-1. **discover** — BFS по внутренним ссылкам раздела, копит список URL в
-   `cache/urls.json`.
-2. **fetch** — рендерит каждую страницу через Playwright и кладёт HTML в
-   `cache/html/<hash>.html`. Возобновляемая.
-3. **parse** — превращает все HTML в `cache/raw_pages.json` (общая структура:
-   infobox, таблицы, секции, ссылки, категории).
-4. **normalize** — классифицирует страницы (герой / юнит / заклинание / навык /
-   фракция / артефакт / постройка / другое) и пишет финальный
-   `olden_era.json`.
+## Зависимости
 
-## Замечание про robots.txt
-
-В `robots.txt` сайта стоят content-signals: `search=yes`, `ai-train=no`.
-Извлечение игровых статов в JSON для личного использования — не AI-training,
-формально под `ai-train=no` не подпадает. Но имей в виду, что сайт защищён
-Cloudflare и явно не приветствует автоматизацию: ставь `--delay` не ниже
-дефолтных 1.5 сек.
+`scrape_paradrew.py` использует только stdlib (`urllib`) — ничего ставить
+не нужно. `scrape_olden_era.py` требует `pip install -r requirements.txt` +
+`python -m playwright install chromium`.
