@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "https://paradrew.com",
-    "scraped_at": "2026-05-26T23:58:12.322785+00:00",
+    "scraped_at": "2026-05-27T00:06:57.709586+00:00",
     "note": "paradrew.com — Russian Olden Era reference (canonical for stats).",
     "section": "spells",
     "count": 88
@@ -950,7 +950,19 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "10",
+          "description": "Переносит героя к выбранному опорному пункту под вашим контролем. 1 раз(а) в день.",
+          "mechanics": [
+            {
+              "label": "Применения",
+              "value": "1/день"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/back-to-town/",
@@ -1008,7 +1020,19 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "10",
+          "description": "Переносит героя в ваш ближайший город в пределах 16 клеток. Все оставшиеся очки движения теряются. 1 раз(а) в день.",
+          "mechanics": [
+            {
+              "label": "Применения",
+              "value": "1/день"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/berserk/",
@@ -3413,7 +3437,23 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "10",
+          "description": "Уничтожает выбранный призванный отряд противника.",
+          "mechanics": [
+            {
+              "label": "Цель",
+              "value": "Вражеское существо"
+            },
+            {
+              "label": "Область",
+              "value": "Одна цель"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/doreaths-tide/",
@@ -3627,7 +3667,23 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "10",
+          "description": "Следующее заклинание героя противника стоит +100% маны и получает –50% бонуса от силы магии.",
+          "mechanics": [
+            {
+              "label": "Цель",
+              "value": "Вражеское существо"
+            },
+            {
+              "label": "Область",
+              "value": "Одна цель"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/early-start/",
@@ -7489,7 +7545,27 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "0",
+          "description": "Наносит [ 25 + 5 × сила магии героя ] магического урона выбранному отряду противника.",
+          "mechanics": [
+            {
+              "label": "Урон",
+              "value": "25 Магический"
+            },
+            {
+              "label": "Цель",
+              "value": "Вражеское существо"
+            },
+            {
+              "label": "Область",
+              "value": "Одна цель"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/mana-rite/",
@@ -7547,7 +7623,19 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "0",
+          "description": "Восстанавливает ману героя в обмен на очки движения: +1% маны за каждые 1% имеющихся очков движения. Все очки движения теряются.",
+          "mechanics": [
+            {
+              "label": "Применения",
+              "value": "Без ограничений"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/mana-transfusion/",
@@ -7605,7 +7693,19 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "10",
+          "description": "Герой тратит 10 маны, чтобы восстановить 20 маны союзному герою в пределах 0 клеток. 1 раз(а) в день.",
+          "mechanics": [
+            {
+              "label": "Применения",
+              "value": "1/день"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/mirror-copy/",
@@ -8153,7 +8253,19 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "0",
+          "description": "Позволяет включать и отключать воскрешение отрядов некромантией. Если воскрешение отключено, герой не поднимает нежить после победы в бою, а вместо этого восстанавливает некротическую энергию.",
+          "mechanics": [
+            {
+              "label": "Применения",
+              "value": "Без ограничений"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/optical-illusion/",
@@ -9276,7 +9388,19 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "12",
+          "description": "Позволяет герою провзаимодействовать с любым вашим городом и переместить войска туда и оттуда. 1 раз(а) в день.",
+          "mechanics": [
+            {
+              "label": "Применения",
+              "value": "1/день"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/rewind-life/",
@@ -11256,7 +11380,23 @@
             ]
           ]
         }
-      ]
+      ],
+      "tiers": {
+        "Уровень 1": {
+          "mana": "10",
+          "description": "Следующее заклинание героя стоит –100% маны и получает +100% бонуса от силы магии.",
+          "mechanics": [
+            {
+              "label": "Цель",
+              "value": "Союзное существо"
+            },
+            {
+              "label": "Область",
+              "value": "Одна цель"
+            }
+          ]
+        }
+      }
     },
     {
       "source_url": "https://paradrew.com/ru/olden-era/spells/stone-fangs/",

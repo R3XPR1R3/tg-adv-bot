@@ -361,16 +361,21 @@ def parse_skill(html: str, url: str) -> dict[str, Any]:
             out["description"] = t
     sections = parse_section_tree(html)
     out["sections"] = sections
-    # convenience: pull out tier sections by title prefix
-    label_map = {"Основы": "basic", "Продвинутое": "advanced",
-                 "Экспертное": "expert", "Мастер": "master"}
+    # match by stem — Russian adjectives change gender: Продвинутая/Продвинутый/
+    # Продвинутое; Экспертная/Экспертный/Экспертное.
+    stem_map = [
+        ("Основы",     "basic"),
+        ("Продвинут",  "advanced"),
+        ("Эксперт",    "expert"),
+        ("Мастер",     "master"),
+    ]
     tiers: dict[str, dict[str, Any]] = {}
     for sec in sections:
         if sec.get("level") != 2:
             continue
         title = sec.get("title", "")
-        key = next((v for k, v in label_map.items() if title.startswith(k)), None)
-        if key:
+        key = next((v for stem, v in stem_map if title.startswith(stem)), None)
+        if key and key not in tiers:
             tiers[key] = sec
     if tiers:
         out["tiers"] = tiers
@@ -399,10 +404,10 @@ def parse_spell(html: str, url: str) -> dict[str, Any]:
         out["costs"] = costs
     sections = parse_section_tree(html)
     out["sections"] = sections
-    # tier blocks are <section class="level" data-level="N">
+    # tier blocks are <section class="level [active]" data-level="N">
     tiers: dict[str, dict[str, Any]] = {}
     for lvl in re.finditer(
-        r'<section\b[^>]*class="level"[^>]*\bdata-level="(?P<n>\d+)"[^>]*>(?P<body>.*?)</section>',
+        r'<section\b[^>]*class="level\b[^"]*"[^>]*\bdata-level="(?P<n>\d+)"[^>]*>(?P<body>.*?)</section>',
         html, re.S | re.I):
         n = lvl.group("n")
         body = lvl.group("body")
